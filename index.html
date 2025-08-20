@@ -1,0 +1,1116 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flanco Norte - Sistema de Análise Criminal</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #0a0a0a;
+            color: #ffffff;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Animated Background */
+        .background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 50%, #0f0f0f 100%);
+        }
+
+        .background::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 80%, rgba(220, 38, 38, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(220, 38, 38, 0.08) 0%, transparent 50%),
+                radial-gradient(circle at 40% 40%, rgba(220, 38, 38, 0.05) 0%, transparent 50%);
+            animation: float 20s ease-in-out infinite;
+        }
+
+        .background::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="rgba(255,255,255,0.02)" stroke-width="0.5"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
+            animation: slide 30s linear infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            33% { transform: translate(-20px, -20px) rotate(1deg); }
+            66% { transform: translate(20px, -10px) rotate(-1deg); }
+        }
+
+        @keyframes slide {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-100px); }
+        }
+
+        /* Login Container */
+        .login-container {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            position: relative;
+        }
+
+        .login-card {
+            background: rgba(10, 10, 10, 0.9);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(220, 38, 38, 0.2);
+            border-radius: 24px;
+            padding: 48px;
+            max-width: 440px;
+            width: 100%;
+            box-shadow: 
+                0 32px 64px rgba(0, 0, 0, 0.4),
+                0 0 0 1px rgba(255, 255, 255, 0.05),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            position: relative;
+            overflow: hidden;
+            animation: slideUp 0.8s ease-out;
+        }
+
+        .login-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(220, 38, 38, 0.1), transparent);
+            animation: shimmer 3s infinite;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes shimmer {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+
+        .logo-section {
+            text-align: center;
+            margin-bottom: 40px;
+            position: relative;
+        }
+
+        .logo-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #dc2626, #b91c1c);
+            border-radius: 20px;
+            margin: 0 auto 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 
+                0 20px 40px rgba(220, 38, 38, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.2);
+            animation: pulse 2s ease-in-out infinite;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .logo-icon::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: conic-gradient(transparent, rgba(255, 255, 255, 0.3), transparent);
+            animation: rotate 4s linear infinite;
+        }
+
+        .logo-icon img {
+            width: 50px;
+            height: 50px;
+            object-fit: contain;
+            position: relative;
+            z-index: 2;
+            filter: brightness(0) invert(1);
+            transition: all 0.3s ease;
+        }
+
+        .logo-icon:hover img {
+            transform: scale(1.1);
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .system-title {
+            font-size: 28px;
+            font-weight: 700;
+            background: linear-gradient(135deg, #ffffff, #dc2626);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 8px;
+            letter-spacing: -0.5px;
+        }
+
+        .system-subtitle {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 14px;
+            font-weight: 400;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        /* Form Styles */
+        .form-group {
+            margin-bottom: 24px;
+            position: relative;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            color: rgba(255, 255, 255, 0.8);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 16px 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            color: #ffffff;
+            font-size: 16px;
+            font-weight: 400;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            backdrop-filter: blur(10px);
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #dc2626;
+            background: rgba(255, 255, 255, 0.08);
+            box-shadow: 
+                0 0 0 4px rgba(220, 38, 38, 0.1),
+                0 8px 16px rgba(0, 0, 0, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .form-input::placeholder {
+            color: rgba(255, 255, 255, 0.4);
+        }
+
+        .login-button {
+            width: 100%;
+            padding: 18px;
+            background: linear-gradient(135deg, #dc2626, #b91c1c);
+            border: none;
+            border-radius: 12px;
+            color: white;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            box-shadow: 
+                0 8px 16px rgba(220, 38, 38, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.2);
+        }
+
+        .login-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.6s;
+        }
+
+        .login-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 
+                0 12px 24px rgba(220, 38, 38, 0.4),
+                inset 0 1px 0 rgba(255, 255, 255, 0.3);
+        }
+
+        .login-button:hover::before {
+            left: 100%;
+        }
+
+        .login-button:active {
+            transform: translateY(-1px);
+        }
+
+        .login-button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Error and Success Messages */
+        .message {
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 24px;
+            font-size: 14px;
+            display: none;
+            animation: slideDown 0.3s ease-out;
+        }
+
+        .error-message {
+            background: rgba(220, 38, 38, 0.1);
+            border: 1px solid rgba(220, 38, 38, 0.3);
+            color: #fca5a5;
+        }
+
+        .success-message {
+            background: rgba(34, 197, 94, 0.1);
+            border: 1px solid rgba(34, 197, 94, 0.3);
+            color: #86efac;
+        }
+
+        .info-message {
+            background: rgba(59, 130, 246, 0.1);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            color: #93c5fd;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Dashboard Styles */
+        .dashboard-container {
+            display: none;
+            width: 100vw;
+            height: 100vh;
+            position: fixed;
+            top: 0;
+            left: 0;
+            background: #0a0a0a;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .dashboard-header {
+            background: rgba(10, 10, 10, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(220, 38, 38, 0.2);
+            padding: 20px 32px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+            z-index: 1000;
+        }
+
+        .dashboard-title {
+            font-size: 20px;
+            font-weight: 600;
+            background: linear-gradient(135deg, #ffffff, #dc2626);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .user-section {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+        }
+
+        .user-info {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .logout-button {
+            background: rgba(220, 38, 38, 0.1);
+            border: 1px solid rgba(220, 38, 38, 0.3);
+            color: #dc2626;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .logout-button:hover {
+            background: rgba(220, 38, 38, 0.2);
+            transform: translateY(-1px);
+        }
+
+        .dashboard-iframe {
+            width: 100%;
+            height: calc(100vh - 81px);
+            border: none;
+            background: #0a0a0a;
+        }
+
+        /* Loading Animation */
+        .loading {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 40px;
+            height: 40px;
+            border: 2px solid rgba(220, 38, 38, 0.2);
+            border-top: 2px solid #dc2626;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            display: none;
+        }
+
+        @keyframes spin {
+            0% { transform: translate(-50%, -50%) rotate(0deg); }
+            100% { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .login-card {
+                padding: 32px 24px;
+                margin: 20px;
+                border-radius: 20px;
+            }
+            
+            .system-title {
+                font-size: 24px;
+            }
+            
+            .dashboard-header {
+                padding: 16px 20px;
+                flex-direction: column;
+                gap: 12px;
+                text-align: center;
+            }
+            
+            .user-section {
+                flex-direction: column;
+                gap: 12px;
+            }
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: rgba(220, 38, 38, 0.3);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(220, 38, 38, 0.5);
+        }
+    </style>
+</head>
+<body>
+    <div class="background"></div>
+    
+    <!-- Login Screen -->
+    <div class="login-container" id="loginContainer">
+        <div class="login-card">
+            <div class="logo-section">
+                <div class="logo-icon">
+                    <!-- SUBSTITUA A URL ABAIXO PELA URL DA SUA IMAGEM -->
+                    <img src="https://via.placeholder.com/50x50/FFFFFF/000000?text=PMRS" alt="Logo Flanco Norte" />
+                </div>
+                <h1 class="system-title">FLANCO NORTE</h1>
+                <p class="system-subtitle">Análise Criminal - P2 11°BPM</p>
+            </div>
+            
+            <!-- Messages -->
+            <div class="message error-message" id="errorMessage"></div>
+            <div class="message success-message" id="successMessage"></div>
+            <div class="message info-message" id="infoMessage"></div>
+            
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="username" class="form-label">Usuário</label>
+                    <input 
+                        type="text" 
+                        id="username" 
+                        class="form-input" 
+                        placeholder="Digite seu usuário"
+                        required
+                        autocomplete="username"
+                    >
+                </div>
+                
+                <div class="form-group">
+                    <label for="password" class="form-label">Senha</label>
+                    <input 
+                        type="password" 
+                        id="password" 
+                        class="form-input" 
+                        placeholder="Digite sua senha"
+                        required
+                        autocomplete="current-password"
+                    >
+                </div>
+                
+                <button type="submit" class="login-button" id="loginButton">
+                    Acessar Sistema
+                </button>
+            </form>
+            
+            <div class="loading" id="loading"></div>
+        </div>
+    </div>
+
+    <!-- Dashboard Screen -->
+    <div class="dashboard-container" id="dashboardContainer">
+        <div class="dashboard-header">
+            <div class="dashboard-title">Sistema Flanco Norte - P2 11°BPM</div>
+            <div class="user-section">
+                <div class="user-info" id="userInfo">Carregando...</div>
+                <button class="logout-button" onclick="logout()">
+                    Desconectar
+                </button>
+            </div>
+        </div>
+        
+        <!-- SUBSTITUA A URL ABAIXO PELA URL DO SEU DASHBOARD DO LOOKER STUDIO -->
+        <iframe 
+            class="dashboard-iframe"
+            id="dashboardFrame"
+            src="about:blank"
+            allowfullscreen
+            loading="lazy">
+        </iframe>
+    </div>
+
+    <script>
+        // ============================================================================
+        // CONFIGURAÇÃO DO SISTEMA FLANCO NORTE
+        // ============================================================================
+        
+        const SYSTEM_CONFIG = {
+            // ID da planilha do Google Sheets (SUBSTITUA PELO SEU ID)
+            sheetsId: 'SEU_SHEETS_ID_AQUI',
+            
+            // Nome da aba que contém os usuários
+            usersSheetName: 'usuarios',
+            
+            // Nome da aba que contém os logs de acesso
+            logsSheetName: 'logs_acesso',
+            
+            // URL do dashboard do Looker Studio (SUBSTITUA PELA SUA URL)
+            dashboardUrl: 'https://lookerstudio.google.com/embed/reporting/SEU_DASHBOARD_ID_AQUI/page/p_ID',
+            
+            // Configurações de sessão
+            sessionTimeout: 8 * 60 * 60 * 1000, // 8 horas
+            
+            // Configurações de segurança
+            maxLoginAttempts: 3,
+            lockoutDuration: 15 * 60 * 1000, // 15 minutos
+        };
+
+        // ============================================================================
+        // CLASSE PRINCIPAL DO SISTEMA
+        // ============================================================================
+        
+        class FlancoNorteAuth {
+            constructor() {
+                this.users = [];
+                this.loginAttempts = {};
+                this.initializeElements();
+                this.initializeEventListeners();
+                this.loadUsersFromSheets();
+                this.checkExistingSession();
+            }
+
+            initializeElements() {
+                this.elements = {
+                    loginContainer: document.getElementById('loginContainer'),
+                    dashboardContainer: document.getElementById('dashboardContainer'),
+                    loginForm: document.getElementById('loginForm'),
+                    usernameInput: document.getElementById('username'),
+                    passwordInput: document.getElementById('password'),
+                    loginButton: document.getElementById('loginButton'),
+                    errorMessage: document.getElementById('errorMessage'),
+                    successMessage: document.getElementById('successMessage'),
+                    infoMessage: document.getElementById('infoMessage'),
+                    loading: document.getElementById('loading'),
+                    userInfo: document.getElementById('userInfo'),
+                    dashboardFrame: document.getElementById('dashboardFrame')
+                };
+            }
+
+            initializeEventListeners() {
+                this.elements.loginForm.addEventListener('submit', (e) => this.handleLogin(e));
+                
+                // Enter key navigation
+                this.elements.usernameInput.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') this.elements.passwordInput.focus();
+                });
+                
+                // Auto-hide messages
+                [this.elements.usernameInput, this.elements.passwordInput].forEach(input => {
+                    input.addEventListener('input', () => this.hideMessages());
+                });
+            }
+
+            // ========================================================================
+            // INTEGRAÇÃO COM GOOGLE SHEETS
+            // ========================================================================
+            
+            async loadUsersFromSheets() {
+                try {
+                    this.showInfo('Carregando dados de usuários...');
+                    
+                    // Construir URL da API do Google Sheets
+                    const sheetsUrl = `https://docs.google.com/spreadsheets/d/${SYSTEM_CONFIG.sheetsId}/gviz/tq?tqx=out:json&sheet=${SYSTEM_CONFIG.usersSheetName}`;
+                    
+                    const response = await fetch(sheetsUrl);
+                    const text = await response.text();
+                    
+                    // Parse da resposta do Google Sheets
+                    const jsonData = JSON.parse(text.substring(47).slice(0, -2));
+                    
+                    if (jsonData.table && jsonData.table.rows) {
+                        this.users = this.parseUsersData(jsonData.table);
+                        this.showSuccess(`${this.users.length} usuários carregados com sucesso!`);
+                        
+                        // Auto-hide success message
+                        setTimeout(() => this.hideMessages(), 3000);
+                    } else {
+                        throw new Error('Estrutura de dados inválida');
+                    }
+                    
+                } catch (error) {
+                    console.error('Erro ao carregar usuários:', error);
+                    this.showError('Erro ao conectar com a base de dados. Usando dados locais.');
+                    this.loadFallbackUsers();
+                }
+            }
+
+            parseUsersData(table) {
+                const users = [];
+                
+                // Assumindo que a primeira linha contém os cabeçalhos:
+                // A: username | B: password | C: name | D: rank | E: active
+                
+                if (table.rows && table.rows.length > 1) {
+                    for (let i = 1; i < table.rows.length; i++) {
+                        const row = table.rows[i];
+                        if (row.c && row.c.length >= 4) {
+                            const user = {
+                                username: row.c[0]?.v || '',
+                                password: row.c[1]?.v || '',
+                                name: row.c[2]?.v || '',
+                                rank: row.c[3]?.v || '',
+                                active: row.c[4]?.v !== false // Default true se não especificado
+                            };
+                            
+                            if (user.username && user.password && user.active) {
+                                users.push(user);
+                            }
+                        }
+                    }
+                }
+                
+                return users;
+            }
+
+            loadFallbackUsers() {
+                // Dados de fallback caso o Sheets não funcione
+                this.users = [
+                    { username: 'comandante', password: 'cmd2024', name: 'Ten. Cel. Silva', rank: 'Comandante', active: true },
+                    { username: 'capitao', password: 'cap2024', name: 'Cap. Santos', rank: 'Capitão', active: true },
+                    { username: 'tenente', password: 'ten2024', name: 'Ten. Oliveira', rank: 'Tenente', active: true },
+                    { username: 'sargento', password: 'sgt2024', name: 'Sgt. Costa', rank: 'Sargento', active: true },
+                    { username: 'admin', password: 'admin123', name: 'Administrador', rank: 'Admin Sistema', active: true }
+                ];
+            }
+
+            async logAccessToSheets(username, action, details = '') {
+                try {
+                    const logData = {
+                        timestamp: new Date().toISOString(),
+                        username: username,
+                        action: action,
+                        details: details,
+                        ip: 'N/A', // Em produção, obter do servidor
+                        userAgent: navigator.userAgent.substring(0, 100) // Limitar tamanho
+                    };
+                    
+                    // Em um ambiente real, você usaria a API do Google Sheets para escrever
+                    // Por agora, vamos logar no console e localStorage
+                    console.log('LOG DE ACESSO:', logData);
+                    
+                    // Salvar logs localmente como backup
+                    const logs = JSON.parse(localStorage.getItem('flanco_norte_logs') || '[]');
+                    logs.push(logData);
+                    
+                    // Manter apenas os últimos 100 logs
+                    if (logs.length > 100) {
+                        logs.splice(0, logs.length - 100);
+                    }
+                    
+                    localStorage.setItem('flanco_norte_logs', JSON.stringify(logs));
+                    
+                } catch (error) {
+                    console.error('Erro ao logar acesso:', error);
+                }
+            }
+
+            // ========================================================================
+            // AUTENTICAÇÃO E LOGIN
+            // ========================================================================
+            
+            async handleLogin(e) {
+                e.preventDefault();
+                
+                const username = this.elements.usernameInput.value.trim().toLowerCase();
+                const password = this.elements.passwordInput.value;
+                
+                if (!username || !password) {
+                    this.showError('Por favor, preencha todos os campos');
+                    return;
+                }
+
+                // Verificar bloqueio por tentativas
+                if (this.isUserLocked(username)) {
+                    const timeLeft = this.getLockTimeLeft(username);
+                    this.showError(`Usuário bloqueado. Tente novamente em ${Math.ceil(timeLeft / 60000)} minutos.`);
+                    return;
+                }
+
+                this.showLoading(true);
+                
+                // Simular delay de autenticação
+                await new Promise(resolve => setTimeout(resolve, 1500));
+                
+                const authResult = this.authenticateUser(username, password);
+                
+                if (authResult.success) {
+                    await this.loginSuccess(authResult.user);
+                } else {
+                    this.handleLoginFailure(username, authResult.message);
+                }
+                
+                this.showLoading(false);
+            }
+
+            authenticateUser(username, password) {
+                const user = this.users.find(u => 
+                    u.username.toLowerCase() === username && u.active
+                );
+                
+                if (!user) {
+                    return { success: false, message: 'Usuário não encontrado ou inativo' };
+                }
+                
+                if (user.password !== password) {
+                    return { success: false, message: 'Senha incorreta' };
+                }
+                
+                return { success: true, user: user };
+            }
+
+            async loginSuccess(user) {
+                // Limpar tentativas de login
+                delete this.loginAttempts[user.username];
+                
+                // Criar sessão
+                const sessionData = {
+                    username: user.username,
+                    userData: user,
+                    loginTime: Date.now(),
+                    sessionId: this.generateSessionId()
+                };
+                
+                localStorage.setItem('flanco_norte_session', JSON.stringify(sessionData));
+                
+                // Log de acesso
+                await this.logAccessToSheets(user.username, 'LOGIN_SUCCESS', `${user.rank} ${user.name}`);
+                
+                // Mostrar dashboard
+                this.showDashboard(user);
+                this.showSuccess(`Bem-vindo, ${user.rank} ${user.name}!`);
+            }
+
+            handleLoginFailure(username, message) {
+                // Registrar tentativa de login
+                if (!this.loginAttempts[username]) {
+                    this.loginAttempts[username] = { count: 0, lastAttempt: 0 };
+                }
+                
+                this.loginAttempts[username].count++;
+                this.loginAttempts[username].lastAttempt = Date.now();
+                
+                const remainingAttempts = SYSTEM_CONFIG.maxLoginAttempts - this.loginAttempts[username].count;
+                
+                if (remainingAttempts > 0) {
+                    this.showError(`${message}. ${remainingAttempts} tentativa(s) restante(s).`);
+                } else {
+                    this.showError('Muitas tentativas incorretas. Usuário bloqueado temporariamente.');
+                }
+                
+                // Log de tentativa falha
+                this.logAccessToSheets(username, 'LOGIN_FAILED', message);
+                
+                this.clearForm();
+            }
+
+            isUserLocked(username) {
+                const attempts = this.loginAttempts[username];
+                if (!attempts || attempts.count < SYSTEM_CONFIG.maxLoginAttempts) {
+                    return false;
+                }
+                
+                const timeSinceLastAttempt = Date.now() - attempts.lastAttempt;
+                return timeSinceLastAttempt < SYSTEM_CONFIG.lockoutDuration;
+            }
+
+            getLockTimeLeft(username) {
+                const attempts = this.loginAttempts[username];
+                if (!attempts) return 0;
+                
+                const timeSinceLastAttempt = Date.now() - attempts.lastAttempt;
+                return Math.max(0, SYSTEM_CONFIG.lockoutDuration - timeSinceLastAttempt);
+            }
+
+            generateSessionId() {
+                return Math.random().toString(36).substring(2, 15) + 
+                       Math.random().toString(36).substring(2, 15);
+            }
+
+            // ========================================================================
+            // INTERFACE E NAVEGAÇÃO
+            // ========================================================================
+
+            showDashboard(user) {
+                // Atualizar informações do usuário
+                this.elements.userInfo.innerHTML = `
+                    <strong>${user.rank} ${user.name}</strong><br>
+                    <small>Conectado às ${new Date().toLocaleTimeString('pt-BR')}</small>
+                `;
+                
+                // Carregar dashboard
+                this.elements.dashboardFrame.src = SYSTEM_CONFIG.dashboardUrl;
+                
+                // Animar transição
+                this.elements.loginContainer.style.animation = 'fadeOut 0.5s ease-out forwards';
+                
+                setTimeout(() => {
+                    this.elements.loginContainer.style.display = 'none';
+                    this.elements.dashboardContainer.style.display = 'block';
+                }, 500);
+            }
+
+            async logout() {
+                const session = this.getSession();
+                if (session) {
+                    await this.logAccessToSheets(session.username, 'LOGOUT', 'Manual logout');
+                }
+                
+                // Limpar sessão
+                localStorage.removeItem('flanco_norte_session');
+                
+                // Limpar iframe
+                this.elements.dashboardFrame.src = 'about:blank';
+                
+                // Voltar para login
+                this.elements.dashboardContainer.style.display = 'none';
+                this.elements.loginContainer.style.display = 'flex';
+                this.elements.loginContainer.style.animation = 'slideUp 0.5s ease-out';
+                
+                this.clearForm();
+                this.showInfo('Logout realizado com sucesso');
+            }
+
+            checkExistingSession() {
+                const session = this.getSession();
+                
+                if (!session) return;
+                
+                // Verificar se a sessão não expirou
+                const now = Date.now();
+                const sessionAge = now - session.loginTime;
+                
+                if (sessionAge > SYSTEM_CONFIG.sessionTimeout) {
+                    localStorage.removeItem('flanco_norte_session');
+                    this.showError('Sessão expirada. Faça login novamente.');
+                    return;
+                }
+                
+                // Verificar se o usuário ainda está ativo
+                const currentUser = this.users.find(u => 
+                    u.username === session.username && u.active
+                );
+                
+                if (!currentUser) {
+                    localStorage.removeItem('flanco_norte_session');
+                    this.showError('Usuário inativo. Entre em contato com o administrador.');
+                    return;
+                }
+                
+                // Sessão válida, restaurar dashboard
+                this.showDashboard(currentUser);
+            }
+
+            getSession() {
+                try {
+                    const sessionStr = localStorage.getItem('flanco_norte_session');
+                    return sessionStr ? JSON.parse(sessionStr) : null;
+                } catch (error) {
+                    console.error('Erro ao ler sessão:', error);
+                    localStorage.removeItem('flanco_norte_session');
+                    return null;
+                }
+            }
+
+            // ========================================================================
+            // MENSAGENS E FEEDBACK
+            // ========================================================================
+
+            showError(message) {
+                this.hideMessages();
+                this.elements.errorMessage.textContent = message;
+                this.elements.errorMessage.style.display = 'block';
+                
+                // Auto-hide após 8 segundos
+                setTimeout(() => this.hideMessages(), 8000);
+            }
+
+            showSuccess(message) {
+                this.hideMessages();
+                this.elements.successMessage.textContent = message;
+                this.elements.successMessage.style.display = 'block';
+                
+                // Auto-hide após 5 segundos
+                setTimeout(() => this.hideMessages(), 5000);
+            }
+
+            showInfo(message) {
+                this.hideMessages();
+                this.elements.infoMessage.textContent = message;
+                this.elements.infoMessage.style.display = 'block';
+            }
+
+            hideMessages() {
+                this.elements.errorMessage.style.display = 'none';
+                this.elements.successMessage.style.display = 'none';
+                this.elements.infoMessage.style.display = 'none';
+            }
+
+            showLoading(show) {
+                this.elements.loading.style.display = show ? 'block' : 'none';
+                this.elements.loginButton.disabled = show;
+                this.elements.loginButton.textContent = show ? 'Autenticando...' : 'Acessar Sistema';
+                this.elements.loginForm.style.opacity = show ? '0.6' : '1';
+                this.elements.loginForm.style.pointerEvents = show ? 'none' : 'auto';
+            }
+
+            clearForm() {
+                this.elements.usernameInput.value = '';
+                this.elements.passwordInput.value = '';
+                this.elements.usernameInput.focus();
+            }
+
+            // ========================================================================
+            // UTILITÁRIOS DE SISTEMA
+            // ========================================================================
+
+            async refreshUsers() {
+                await this.loadUsersFromSheets();
+            }
+
+            getSystemLogs() {
+                return JSON.parse(localStorage.getItem('flanco_norte_logs') || '[]');
+            }
+
+            exportLogs() {
+                const logs = this.getSystemLogs();
+                const dataStr = JSON.stringify(logs, null, 2);
+                const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
+                
+                const exportFileDefaultName = `flanco_norte_logs_${new Date().toISOString().split('T')[0]}.json`;
+                
+                const linkElement = document.createElement('a');
+                linkElement.setAttribute('href', dataUri);
+                linkElement.setAttribute('download', exportFileDefaultName);
+                linkElement.click();
+            }
+        }
+
+        // ============================================================================
+        // INICIALIZAÇÃO DO SISTEMA
+        // ============================================================================
+        
+        let authSystem;
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            authSystem = new FlancoNorteAuth();
+            
+            // Adicionar funcionalidades de teclado globais
+            document.addEventListener('keydown', (e) => {
+                // Ctrl+R para refresh dos usuários (apenas em desenvolvimento)
+                if (e.ctrlKey && e.key === 'r' && e.shiftKey) {
+                    e.preventDefault();
+                    authSystem.refreshUsers();
+                }
+                
+                // Esc para limpar mensagens
+                if (e.key === 'Escape') {
+                    authSystem.hideMessages();
+                }
+            });
+        });
+
+        // Função global para logout (chamada pelo botão)
+        function logout() {
+            authSystem.logout();
+        }
+
+        // ============================================================================
+        // FUNÇÕES DE ADMINISTRAÇÃO (PARA DEBUG)
+        // ============================================================================
+        
+        // Essas funções ficam disponíveis no console do navegador para debug
+        window.FlancoNorte = {
+            refreshUsers: () => authSystem.refreshUsers(),
+            getLogs: () => authSystem.getSystemLogs(),
+            exportLogs: () => authSystem.exportLogs(),
+            clearLogs: () => localStorage.removeItem('flanco_norte_logs'),
+            getSession: () => authSystem.getSession(),
+            version: '1.0.0'
+        };
+
+        // Auto-refresh dos usuários a cada 10 minutos (opcional)
+        setInterval(() => {
+            if (authSystem && document.visibilityState === 'visible') {
+                authSystem.refreshUsers();
+            }
+        }, 10 * 60 * 1000);
+
+        // Adicionar estilos de animação dinâmicos
+        const dynamicStyles = document.createElement('style');
+        dynamicStyles.textContent = `
+            @keyframes fadeOut {
+                from { opacity: 1; transform: scale(1); }
+                to { opacity: 0; transform: scale(0.95); }
+            }
+            
+            /* Indicador de conectividade */
+            .connectivity-indicator {
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                padding: 8px 16px;
+                border-radius: 20px;
+                font-size: 12px;
+                font-weight: 500;
+                z-index: 9999;
+                transition: all 0.3s ease;
+            }
+            
+            .connectivity-indicator.online {
+                background: rgba(34, 197, 94, 0.1);
+                border: 1px solid rgba(34, 197, 94, 0.3);
+                color: #86efac;
+            }
+            
+            .connectivity-indicator.offline {
+                background: rgba(239, 68, 68, 0.1);
+                border: 1px solid rgba(239, 68, 68, 0.3);
+                color: #fca5a5;
+            }
+        `;
+        document.head.appendChild(dynamicStyles);
+
+        // Monitor de conectividade
+        function updateConnectivityStatus() {
+            let indicator = document.querySelector('.connectivity-indicator');
+            if (!indicator) {
+                indicator = document.createElement('div');
+                indicator.className = 'connectivity-indicator';
+                document.body.appendChild(indicator);
+            }
+            
+            if (navigator.onLine) {
+                indicator.className = 'connectivity-indicator online';
+                indicator.textContent = '🟢 Online';
+            } else {
+                indicator.className = 'connectivity-indicator offline';
+                indicator.textContent = '🔴 Offline';
+            }
+        }
+
+        window.addEventListener('online', updateConnectivityStatus);
+        window.addEventListener('offline', updateConnectivityStatus);
+        updateConnectivityStatus();
+
+    </script>
+</body>
+</html>
